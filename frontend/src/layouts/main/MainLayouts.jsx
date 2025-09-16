@@ -13,7 +13,11 @@ function MainLayout({ children }) {
     const { user } = useSelector(state => state.auth);
     useEffect(() => {
         dispatch(fetchUser())
-    }, [])
+    }, [dispatch])
+
+    const role = user?.roles?.[0]?.name; // because you load roles in backend
+
+    
     return (
         <div className="main-layout-container">
             {/* Barre latérale (Sidebar) */}
@@ -26,6 +30,12 @@ function MainLayout({ children }) {
                 {/* Liens de navigation */}
                 <nav className="navigation-links">
                     <Link to='/home' className="nav-link">Dashboard</Link>
+                    {role === 'manage' || role === 'admin' ? (
+                        <Link to='/home/projects' className="nav-link">Projects</Link>
+                    ) : null}
+                    {role === 'admin' && (
+                        <Link to='/home/manage' className="nav-link">Users</Link>
+                    )}
                     
                 </nav>
             </aside>

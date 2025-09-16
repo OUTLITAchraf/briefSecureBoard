@@ -10,6 +10,7 @@ import Profile from './components/Profile/Profile'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ProtectedRoute from './components/ProtectedRoute'
+import Dashboard from './pages/Dahboard'
 
 function App() {
   const dispatch = useDispatch()
@@ -28,8 +29,8 @@ function App() {
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path='/home' element={<MainLayout />} >
+            <Route index element={<Dashboard />} />
             <Route path='/home/profile' element={<Profile />} />
-            <Route path='/home/test' element={<h1>test page</h1>} />
           </Route>
         </Route>
       </Routes>
