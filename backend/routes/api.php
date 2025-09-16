@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('web')->group(function () {
+    // CSRF cookie endpoint
+    Route::get('/sanctum/csrf-cookie', function () {
+        return response()->json(['csrf' => csrf_token()]);
+    });
+
+    // Guest routes
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+
+    // Authenticated routes
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+        Route::get('/user', function (Request $request) {
+            return $request->user()->load('roles');
+            ;
+        });
+    });
 });
+
+// require __DIR__.'/auth.php';
+

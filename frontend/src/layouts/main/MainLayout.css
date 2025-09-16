@@ -1,0 +1,142 @@
+/* MainLayout.css */
+
+/* Variables pour les couleurs */
+:root {
+    --primary-color: #4a90e2;
+    /* Bleu */
+    --secondary-color: #f5f6f8;
+    /* Gris clair */
+    --dark-text-color: #333;
+    --light-text-color: #fff;
+    --border-color: #e0e0e0;
+    --hover-color: #357bd2;
+}
+
+/* Conteneur principal */
+.main-layout-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--dark-text-color);
+}
+
+/* Barre latérale (Sidebar) */
+.sidebar {
+    width: 250px;
+    background-color: var(--dark-text-color);
+    color: var(--light-text-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Style du logo */
+.logo-container {
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+}
+
+/* Liens de navigation */
+.navigation-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-link {
+    color: var(--light-text-color);
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    background-color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+/* Contenu principal */
+.content-area {
+    flex-grow: 1;
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Barre de navigation supérieure (Navbar) */
+.top-navbar {
+    background-color: var(--light-text-color);
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Menu déroulant de profil */
+.profile-dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.profile-dropdown>span {
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.profile-dropdown>span:hover {
+    background-color: var(--border-color);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--light-text-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px 0;
+    min-width: 150px;
+    z-index: 10;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--dark-text-color);
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Contenu dynamique (où le contenu de la page sera affiché) */
+.main-content {
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Permet le défilement si le contenu est trop grand */
+}
