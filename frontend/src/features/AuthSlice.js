@@ -61,7 +61,7 @@ export const userRegister = createAsyncThunk('auth/userRegister', async (data, {
     }
 })
 
-//fetch user
+//fetch user-
 
 export const fetchUser = createAsyncThunk(
     'auth/fetchUser',
