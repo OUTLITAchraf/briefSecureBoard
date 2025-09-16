@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -17,7 +18,7 @@ use App\Http\Controllers\ProfileController;
 */
 
 Route::middleware('web')->group(function () {
-    
+
     // CSRF cookie endpoint
     Route::get('/sanctum/csrf-cookie', function () {
         return response()->json(['csrf' => csrf_token()]);
@@ -35,6 +36,15 @@ Route::middleware('web')->group(function () {
         });
         Route::put('/profile', [ProfileController::class, 'update']);
     });
+});
+
+
+// Manger Routes (Project)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/projects',[ProjectsController::class,'index']);
+    Route::post('/projects',[ProjectsController::class,'create']);
+    Route::put('/projects/{id}',[ProjectsController::class,'edit']);
+    Route::delete('/projects/{id}',[ProjectsController::class,'destroy']);
 });
 
 // require __DIR__.'/auth.php';
