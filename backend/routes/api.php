@@ -17,6 +17,7 @@ use App\Http\Controllers\ProfileController;
 */
 
 Route::middleware('web')->group(function () {
+    
     // CSRF cookie endpoint
     Route::get('/sanctum/csrf-cookie', function () {
         return response()->json(['csrf' => csrf_token()]);
