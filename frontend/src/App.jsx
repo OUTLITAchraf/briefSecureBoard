@@ -7,6 +7,8 @@ import RegisterPage from './pages/register/RegisterPage'
 import { fetchUser } from './features/AuthSlice'
 import MainLayout from './layouts/main/MainLayouts'
 import Profile from './components/Profile/Profile'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   let { test } = useSelector((state) => state.auth)
@@ -17,7 +19,7 @@ function App() {
   }, [])
   return (
     <>
-
+      <ToastContainer />
       <Routes>
         <Route path='/' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
@@ -25,7 +27,6 @@ function App() {
           <Route path='/home/profile' element={<Profile />} />
           <Route path='/home/test' element={<h1>test page</h1>} />
         </Route>
-
       </Routes>
     </>
   )

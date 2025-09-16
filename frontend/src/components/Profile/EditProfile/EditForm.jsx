@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import './EditForm.css';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { updateProfile } from '../../../features/AuthSlice';
+import { toast } from 'react-toastify';
 
 const schema = yup.object().shape({
     name: yup.string().required('Name is required.'),
@@ -14,20 +15,22 @@ const schema = yup.object().shape({
 });
 
 const EditForm = ({ user }) => {
-    // let {user} = useSelector((state)=>state.auth);
-
-    const { register, handleSubmit, formState: { errors,isValid,isDirty } } = useForm({
-        
+    const dispatch = useDispatch();
+    const { register, handleSubmit, formState: { errors, isDirty } } = useForm({
         resolver: yupResolver(schema),
         values: {
             name: user?.name,
             email: user?.email
         }
-
     });
 
+    const { update } = useSelector((state) => state.auth);
+
     const onSubmit = (data) => {
-        console.log('edit data :', data);
+        dispatch(updateProfile(data))
+            .unwrap()
+            .then(() => toast.success("Profile updated successfully 🎉"))
+            .catch((err) => toast.error(err || "Failed to update profile ❌"));
     };
 
     return (
@@ -37,28 +40,25 @@ const EditForm = ({ user }) => {
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group">
-                    <label htmlFor="name">Name  </label>
-                    <input
-                        id="name"
-                        type="text"
-                        className="form-control"
-                        {...register('name')}
-                    />
+                    <label htmlFor="name">Name</label>
+                    <input id="name" type="text" className="form-control" {...register('name')} />
                     {errors.name && <p className="error-message">{errors.name.message}</p>}
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="email">Email </label>
-                    <input
-                        id="email"
-                        type="email"
-                        className="form-control"
-                        {...register('email')}
-                    />
+                    <label htmlFor="email">Email</label>
+                    <input id="email" type="email" className="form-control" {...register('email')} />
                     {errors.email && <p className="error-message">{errors.email.message}</p>}
                 </div>
 
-                <button type="submit" className="submit-button" disabled={!isDirty} style={{cursor:!isDirty ? 'not-allowed' : 'pointer'}}>Save Changes</button>
+                <button
+                    type="submit"
+                    className="submit-button"
+                    disabled={!isDirty || update.isLoading}
+                    style={{ cursor: (!isDirty || update.isLoading) ? 'not-allowed' : 'pointer' }}
+                >
+                    {update.isLoading ? <><span className="spinner"></span>Saving...</> : "Save Changes"}
+                </button>
             </form>
         </div>
     );

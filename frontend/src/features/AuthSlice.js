@@ -102,6 +102,30 @@ export const logout = createAsyncThunk('auth/logout', async (data, { rejectWithV
     }
 })
 
+// update profile
+export const updateProfile = createAsyncThunk(
+    'auth/updateProfile',
+    async (data, { rejectWithValue }) => {
+        try {
+            await csrf();
+            const token = Cookies.get("XSRF-TOKEN");
+
+            const response = await api.put('/api/profile', data, {
+                headers: {
+                    "X-XSRF-TOKEN": token,
+                },
+            });
+
+            console.log('Update profile response:', response);
+
+            return response.data.user; // return updated user
+        } catch (error) {
+            console.log('Error while updating profile:', error);
+            return rejectWithValue(error.response?.data?.message || 'Failed to update profile');
+        }
+    }
+);
+
 
 
 const AuthSlice = createSlice({
@@ -121,6 +145,10 @@ const AuthSlice = createSlice({
             isLoading: false,
             error: null
         },
+        update: {              // 👈 new
+            isLoading: false,
+            error: null
+        }
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -191,6 +219,19 @@ const AuthSlice = createSlice({
             state.logout.error = action.payload;
         });
 
+        // UPDATE PROFILE
+        builder.addCase(updateProfile.pending, (state) => {
+            state.update.isLoading = true;
+            state.update.error = null;
+        });
+        builder.addCase(updateProfile.fulfilled, (state, action) => {
+            state.update.isLoading = false;
+            state.user = action.payload; // updated user
+        });
+        builder.addCase(updateProfile.rejected, (state, action) => {
+            state.update.isLoading = false;
+            state.update.error = action.payload;
+        });
     }
 
 })

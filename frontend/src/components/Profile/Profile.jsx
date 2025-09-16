@@ -7,6 +7,8 @@ import EditForm from './EditProfile/EditForm';
 
 const Profile = () => {
     let { user } = useSelector((state) => state.auth)
+    console.log('User in profile component :', user);
+    
 
 
     return (
