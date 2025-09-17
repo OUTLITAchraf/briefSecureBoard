@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -24,5 +25,37 @@ class UsersController extends Controller
             'message' => 'Users fetched successfully!',
             'users' => $users,
         ]);
+    }
+
+
+    public function store(Request $request)
+    {
+        $user = auth()->user();
+        if (!$user->hasRole('admin')) {
+            return response()->json([
+                'message' => 'unautherized'
+            ], 403);
         }
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:6',
+            'role' => 'required|in:user,manage', // only user or manager
+        ]);
+
+        // Create the user
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        // Assign role with Laratrust
+        $user->addRole($request->role);
+
+        return response()->json([
+            'message' => 'User created successfully!',
+            'user' => $user->load('roles'),
+        ]);
+    }
 }

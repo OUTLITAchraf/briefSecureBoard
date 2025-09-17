@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dahboard'
+import UserDashboard from './pages/UserDashboard'
 
 function App() {
   const dispatch = useDispatch()
@@ -31,6 +32,9 @@ function App() {
           <Route path='/home' element={<MainLayout />} >
             <Route index element={<Dashboard />} />
             <Route path='/home/profile' element={<Profile />} />
+            {/* Add more protected routes here */}
+            <Route path='/home/dashboard-users' element={<UserDashboard />} />
+            {/* <Route path='/home/projects' element={<Projects />} /> */}
           </Route>
         </Route>
       </Routes>
