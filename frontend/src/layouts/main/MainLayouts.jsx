@@ -11,9 +11,6 @@ import Logout from '../../components/Auth/logout/Logout';
 function MainLayout({ children }) {
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.auth);
-    useEffect(() => {
-        dispatch(fetchUser())
-    }, [dispatch])
 
     const role = user?.roles?.[0]?.name; // because you load roles in backend
 
