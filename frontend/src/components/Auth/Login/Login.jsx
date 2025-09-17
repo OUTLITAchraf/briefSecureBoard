@@ -29,7 +29,8 @@ function Login() {
 
             const result = await dispatch(userLogin(data));
             if (result.meta.requestStatus === 'fulfilled') {
-                await dispatch(fetchUser())
+                const userResult = await dispatch(fetchUser()).unwrap(); // 👈 wait for fetchUser
+                console.log("Logged in user:", userResult);
                 navigate('/home');
             }
         }
