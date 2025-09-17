@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import './EditForm.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../../../features/AuthSlice';
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'; 
 
 const schema = yup.object().shape({
     name: yup.string().required('Name is required.'),

@@ -194,7 +194,6 @@ const AuthSlice = createSlice({
         // Fetch user
         builder.addCase(fetchUser.fulfilled, (state, action) => {
             console.log("fetch user fulfilled :", action.payload);
-
             state.user = action.payload;
         });
         builder.addCase(fetchUser.rejected, (state, action) => {

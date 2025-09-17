@@ -10,13 +10,14 @@ import Profile from './components/Profile/Profile'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ProtectedRoute from './components/ProtectedRoute'
+import AllProjects from './pages/projects/AllProjects'
 
 function App() {
   const dispatch = useDispatch()
   
   useEffect(() => {
     dispatch(fetchUser())
-  }, [])
+  }, [dispatch])
 
   return (
     <>
@@ -26,12 +27,12 @@ function App() {
         <Route path='/register' element={<RegisterPage />} />
         
         {/* Protected Routes */}
-        <Route element={<ProtectedRoute />}>
+        {/* <Route element={<ProtectedRoute />}> */}
           <Route path='/home' element={<MainLayout />} >
             <Route path='/home/profile' element={<Profile />} />
-            <Route path='/home/test' element={<h1>test page</h1>} />
+            <Route path='/home/projects' element={<AllProjects />} />
           </Route>
-        </Route>
+        {/* </Route> */}
       </Routes>
     </>
   )

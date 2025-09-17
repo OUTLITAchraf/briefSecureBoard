@@ -5,7 +5,7 @@ const ProtectedRoute = () => {
   const { user, isLoading } = useSelector((state) => state.auth);
 
   if (isLoading) {
-    return <div>Loading...</div>; // You can replace this with a proper loading component
+    return <div>Loading...</div>;
   }
 
   return user ? <Outlet /> : <Navigate to="/" replace />;

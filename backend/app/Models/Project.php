@@ -12,10 +12,25 @@ class Project extends Model
         'name',
         'description',
         'user_id',
+        'team_members', // Add the new column here
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'team_members' => 'array', // Cast the column to an array
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function teamMembers()
+    {
+        return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id');
     }
 }
