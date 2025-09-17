@@ -58,4 +58,27 @@ class UsersController extends Controller
             'user' => $user->load('roles'),
         ]);
     }
+
+    public function destroy($id)
+{
+    $user = User::findOrFail($id);
+
+    // Optional safeguard: prevent deleting admin
+    if ($user->hasRole('admin')) {
+        return response()->json([
+            'message' => 'Cannot delete admin users.'
+        ], 403);
+    }
+
+    // Detach roles
+    $user->roles()->detach();
+
+    // Delete user
+    $user->delete();
+
+    return response()->json([
+        'message' => 'User deleted successfully!'
+    ]);
+}
+
 }

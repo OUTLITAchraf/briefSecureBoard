@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./UserDashboard.css";
 import { FiEdit, FiTrash2, FiUserPlus } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser, fetchUsers } from "../features/UserSlice";
+import { createUser, deleteUser, fetchUsers } from "../features/UserSlice";
 import Loading from "../components/Loading";
 
 function UserDashboard() {
@@ -20,7 +20,7 @@ function UserDashboard() {
     const newUser = {
       name: form.name.value,
       email: form.email.value,
-      password: e.target.password.value, 
+      password: e.target.password.value,
       role: form.role.value,
     };
 
@@ -68,7 +68,9 @@ function UserDashboard() {
                   <button className="btn edit-btn">
                     <FiEdit style={{ marginRight: "4px" }} /> Edit
                   </button>
-                  <button className="btn delete-btn">
+                  <button
+                    onClick={() => dispatch(deleteUser(user.id))}
+                    className="btn delete-btn">
                     <FiTrash2 style={{ marginRight: "4px" }} /> Delete
                   </button>
                 </td>
