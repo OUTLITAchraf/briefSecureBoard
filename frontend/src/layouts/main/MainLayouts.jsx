@@ -31,7 +31,7 @@ function MainLayout({ children }) {
                         <Link to='/home/projects' className="nav-link">Projects</Link>
                     ) : null}
                     {role === 'admin' && (
-                        <Link to='/home/manage' className="nav-link">Users</Link>
+                        <Link to='/home/dashboard-users' className="nav-link">Users</Link>
                     )}
                     
                 </nav>
