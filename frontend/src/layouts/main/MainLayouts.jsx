@@ -11,9 +11,10 @@ import Logout from '../../components/Auth/logout/Logout';
 function MainLayout({ children }) {
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.auth);
-    useEffect(() => {
-        dispatch(fetchUser())
-    }, [])
+
+    const role = user?.roles?.[0]?.name; // because you load roles in backend
+
+    
     return (
         <div className="main-layout-container">
             {/* Barre latérale (Sidebar) */}
@@ -26,7 +27,12 @@ function MainLayout({ children }) {
                 {/* Liens de navigation */}
                 <nav className="navigation-links">
                     <Link to='/home' className="nav-link">Dashboard</Link>
-                    <Link to='/home/projects' className="nav-link">Projects</Link>
+                    {role === 'manage' || role === 'admin' ? (
+                        <Link to='/home/projects' className="nav-link">Projects</Link>
+                    ) : null}
+                    {role === 'admin' && (
+                        <Link to='/home/dashboard-users' className="nav-link">Users</Link>
+                    )}
                     
                 </nav>
             </aside>

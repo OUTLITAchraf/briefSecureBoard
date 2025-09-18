@@ -33,6 +33,7 @@ export const userLogin = createAsyncThunk('auth/userLogin', async (data, { rejec
         });
 
         console.log('Login response :', response);
+        return response.data;  
 
     } catch (error) {
         console.log('Error white login the user :', error.response.data.message);
@@ -131,8 +132,8 @@ export const updateProfile = createAsyncThunk(
 const AuthSlice = createSlice({
     name: "name",
     initialState: {
-        test: "hicham",
         user: null,
+        isLoadingUser: true,
         register: {
             isLoading: false,
             error: null
@@ -192,12 +193,19 @@ const AuthSlice = createSlice({
         });
 
         // Fetch user
+        builder.addCase(fetchUser.pending, (state) => {
+            state.isLoadingUser = true;
+        });
         builder.addCase(fetchUser.fulfilled, (state, action) => {
+            console.log("FETCH USER FULFILLED:", action.payload);
             console.log("fetch user fulfilled :", action.payload);
             state.user = action.payload;
+            state.isLoadingUser = false;
         });
-        builder.addCase(fetchUser.rejected, (state, action) => {
+        builder.addCase(fetchUser.rejected, (state) => {
+            console.log("FETCH USER REJECTED:", action.payload);
             state.user = null;
+            state.isLoadingUser = false;
         });
 
         // LOGOUT

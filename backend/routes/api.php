@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UsersController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -47,7 +48,16 @@ Route::middleware('web')->group(function () {
         Route::get('/projects/team-members', [ProjectsController::class, 'getTeamMembers']);
     });
 
+    // User CRUD routes
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/users', [UsersController::class, 'index']);
+        Route::post('/users', [UsersController::class, 'store']);
+        Route::delete('/users/{id}', [UsersController::class, 'destroy']);
+    });
+
 });
+
 
 
 
