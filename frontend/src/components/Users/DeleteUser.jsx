@@ -28,17 +28,18 @@ function DeleteUser({ handleCloseDelete, userId }) {
   return (
     <>
       <DialogTitle>Delete User</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
+      <DialogContent className="dialog-content">
+        <DialogContentText className="delete-dialog-text">
           Are you sure you want to delete this user? This action cannot be undone.
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className="delete-dialog-actions">
         <Button onClick={handleCloseDelete}>Cancel</Button>
-        <Button onClick={handleDelete} color="error" autoFocus>
+        <Button onClick={handleDelete} color="error" autoFocus disabled={isLoading}>
           {isLoading ? "Deleting..." : "Delete"}
         </Button>
       </DialogActions>
+
     </>
   );
 }
