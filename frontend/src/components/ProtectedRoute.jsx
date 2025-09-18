@@ -1,13 +1,13 @@
 // components/ProtectedRoute.jsx
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import Loading from "./Loading";
+import LoadingUser from "./LoadingUser";
 
 const ProtectedRoute = () => {
   const { user, isLoadingUser } = useSelector((state) => state.auth);
 
   if (isLoadingUser) {
-    return <Loading/>;   // 👈 only temporary while fetchUser runs
+    return <LoadingUser/>;   // 👈 only temporary while fetchUser runs
   }
 
   if (!user) {
