@@ -38,23 +38,29 @@ Route::middleware('web')->group(function () {
         Route::put('/profile', [ProfileController::class, 'update']);
     });
 
+    // Manger Routes (Project)
+    Route::middleware('auth:sanctum')->group(function () {
+
+        Route::get('/projects', [ProjectsController::class, 'index']);
+        Route::post('/projects', [ProjectsController::class, 'create']);
+        Route::put('/projects/{id}', [ProjectsController::class, 'edit']);
+        Route::delete('/projects/{id}', [ProjectsController::class, 'destroy']);
+        Route::get('/projects/team-members', [ProjectsController::class, 'getTeamMembers']);
+    });
+
+    // User CRUD routes
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/users', [UsersController::class, 'index']);
+        Route::post('/users', [UsersController::class, 'store']);
+        Route::delete('/users/{id}', [UsersController::class, 'destroy']);
+    });
+
 });
 
-// User CRUD routes
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', [UsersController::class, 'index']);
-    Route::post('/users',[UsersController::class,'store']);
-    Route::delete('/users/{id}', [UsersController::class, 'destroy']);
-});
 
-// Manger Routes (Project)
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/projects',[ProjectsController::class,'index']);
-    Route::post('/projects',[ProjectsController::class,'create']);
-    Route::put('/projects/{id}',[ProjectsController::class,'edit']);
-    Route::delete('/projects/{id}',[ProjectsController::class,'destroy']);
-});
+
 
 // require __DIR__.'/auth.php';
 

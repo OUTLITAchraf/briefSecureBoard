@@ -12,10 +12,11 @@ import 'react-toastify/dist/ReactToastify.css'
 import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dahboard'
 import UserDashboard from './pages/UserDashboard'
+import AllProjects from './pages/projects/AllProjects'
 
 function App() {
   const dispatch = useDispatch()
-  
+
   useEffect(() => {
     dispatch(fetchUser())
   }, [dispatch])
@@ -26,7 +27,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
-        
+
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path='/home' element={<MainLayout />} >
@@ -35,6 +36,7 @@ function App() {
             {/* Add more protected routes here */}
             <Route path='/home/dashboard-users' element={<UserDashboard />} />
             {/* <Route path='/home/projects' element={<Projects />} /> */}
+            <Route path='/home/projects' element={<AllProjects />} />
           </Route>
         </Route>
       </Routes>

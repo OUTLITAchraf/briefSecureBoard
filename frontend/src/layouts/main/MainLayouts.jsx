@@ -21,7 +21,7 @@ function MainLayout({ children }) {
             <aside className="sidebar">
                 {/* Logo */}
                 <div className="logo-container">
-                    <img src="https://via.placeholder.com/150" alt="Logo" className="logo" />
+                    <h1>SecureBoard</h1>
                 </div>
 
                 {/* Liens de navigation */}

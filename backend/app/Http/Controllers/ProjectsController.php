@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectsController extends Controller
 {
-    
-    public function index()
+
+    public function index(Request $request)
     {
-        $user = auth()->user();
-        if (!$user->hasRole('manager')) {
-            // abort(403, 'Accès non autorisé.');
+        $user = Auth::user();
+        if (!$user->hasRole('manage')) {
             return response()->json([
                 'message' => 'unautherized'
             ], 403);
         }
 
-        $projects = Project::where('id', $user->id);
+        $projects = Project::where('user_id', $user->id)
+            ->with('user', 'teamMembers')
+            ->get();
 
         if (!$projects) {
             return response()->json([
@@ -32,27 +35,44 @@ class ProjectsController extends Controller
         ], 200);
 
     }
-    
+
     public function create(Request $request)
     {
-
         $user = auth()->user();
-        if (!$user->hasRole('manager')) {
-            // abort(403, 'Accès non autorisé.');
+
+        if (!$user->hasRole('manage')) {
             return response()->json([
-                'message' => 'unautherized'
+                'message' => 'Unauthorized'
             ], 403);
         }
 
-        $newProject = Project::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'user_id' => $user->id
+        // Use validation to handle all incoming data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'team_members' => 'nullable|array',
+            'team_members.*' => 'integer|exists:users,id',
         ]);
 
+        // Create the project using the validated data
+        $project = Project::create([
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'user_id' => $user->id,
+            'team_members' => $validatedData['team_members'] ?? null,
+        ]);
+
+        if (isset($validatedData['team_members'])) {
+            $project->teamMembers()->sync($validatedData['team_members']);
+        }
+
+        $projects = Project::where('user_id', $user->id)
+            ->with('user', 'teamMembers')
+            ->get();
+
         return response()->json([
-            'message' => "new project was created successfully",
-            'project' => $newProject
+            'message' => "New project was created successfully",
+            'projects' => $projects
         ], 200);
     }
 
@@ -63,30 +83,48 @@ class ProjectsController extends Controller
 
     public function edit(Request $request, string $id)
     {
-        //
-
         $user = auth()->user();
 
-        if (!$user->hasRole('manager')) {
-            // abort(403, 'Accès non autorisé.');
+        if (!$user->hasRole('manage')) {
             return response()->json([
                 'message' => 'unautherized'
             ], 403);
         }
 
-        $data = $request->all();
+        $project = Project::find($id);
 
-        $project = Project::where('id', $id)->update([
+        if (!$project || $project->user_id !== $user->id) {
+            return response()->json(['message' => 'Project not found or unauthorized.'], 404);
+        }
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'team_members' => 'nullable|array',
+            'team_members.*' => 'integer|exists:users,id',
+        ]);
+
+        $project->update([
             'name' => $data['name'],
             'description' => $data['description'],
         ]);
 
+
+        if (isset($data['team_members'])) {
+            $project->teamMembers()->sync($data['team_members']);
+        } else {
+            $project->teamMembers()->sync([]);
+        }
+
+
+        $projects = Project::where('user_id', $user->id)
+            ->with('user', 'teamMembers')
+            ->get();
+
         return response()->json([
             'message' => "project was updated successfully",
-            'project' => $project
+            'project' => $projects
         ], 200);
-
-
     }
 
     public function destroy(string $id)
@@ -94,7 +132,7 @@ class ProjectsController extends Controller
         //
         $user = auth()->user();
 
-        if (!$user->hasRole('manager')) {
+        if (!$user->hasRole('manage')) {
             // abort(403, 'Accès non autorisé.');
             return response()->json([
                 'message' => 'unautherized'
@@ -112,7 +150,24 @@ class ProjectsController extends Controller
         $project->delete();
 
         return response()->json([
-                'message' => 'project deleted successfully'
-            ], 200);
+            'message' => 'project deleted successfully'
+        ], 200);
+    }
+
+    public function getTeamMembers()
+    {
+        $user = auth()->user();
+
+        if (!$user->hasRole('manage')) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        })->get(['id', 'name']);
+
+        return response()->json(['users' => $users], 200);
     }
 }
