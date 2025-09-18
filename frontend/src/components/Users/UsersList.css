@@ -1,5 +1,3 @@
-/* src/components/Users/UsersList.css */
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 body {
@@ -138,7 +136,7 @@ body {
     transform: scale(1.05);
 }
 
-.loading-container {
+.loading-container-user {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -159,7 +157,7 @@ body {
     animation: spin 1s linear infinite;
 }
 
-.loading-text {
+.loading-text-user {
     margin-top: 20px;
     font-size: 1.1rem;
     color: #7f8c8d;
@@ -176,65 +174,103 @@ body {
     }
 }
 
-
-/* Modal styles */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+.add-dialog-actions button {
+  padding: 8px 20px;
+  margin-left: 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: none; 
+  transition: all 0.3s ease;
 }
 
-.modal {
-    background: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+.add-dialog-actions button:first-child {
+  background-color: #f0f0f0; 
+  color: #333;
+  border: 1px solid #ccc;
 }
 
-.modal h3 {
-    margin-bottom: 20px;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #2c3e50;
-    text-align: center;
+.add-dialog-actions button:first-child:hover {
+  background-color: #e0e0e0;
 }
 
-.modal input,
-.modal select {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
+.add-dialog-actions button:last-child {
+  background-color: #1976d2; 
+  color: #fff;
 }
 
-.modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+.add-dialog-actions button:last-child:hover {
+  background-color: #115293;
 }
 
-.modal .add-btn {
-    background-color: #3498db;
-    color: white;
+.add-dialog-actions button:disabled {
+  background-color: #90caf9 !important;
+  color: #fff !important;
+  cursor: not-allowed;
 }
 
-.modal .add-btn:hover {
-    background-color: #2980b9;
+.update-dialog-actions button {
+  padding: 8px 20px;
+  margin-left: 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: none; 
+  transition: all 0.3s ease;
 }
 
-.modal .cancel-btn {
-    background-color: #e9ecef;
-    color: #6c757d;
+.update-dialog-actions button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
 }
 
-.modal .cancel-btn:hover {
-    background-color: #d6d6d6;
+.update-dialog-actions button:first-child:hover {
+  background-color: #e0e0e0;
+}
+
+.update-dialog-actions button:last-child {
+  background-color: #1976d2; 
+  color: #fff;
+}
+
+.update-dialog-actions button:last-child:hover {
+  background-color: #115293;
+}
+
+.update-dialog-actions button:disabled {
+  background-color: #90caf9 !important;
+  color: #fff !important;
+  cursor: not-allowed;
+}
+
+
+.delete-dialog-actions button {
+  padding: 8px 20px;
+  margin-left: 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: none; 
+  transition: all 0.3s ease;
+}
+
+.delete-dialog-actions button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.delete-dialog-actions button:first-child:hover {
+  background-color: #e0e0e0;
+}
+
+.delete-dialog-actions button:last-child {
+  background-color: #d32f2f; 
+  color: #fff;
+}
+
+.delete-dialog-actions button:last-child:hover {
+  background-color: #9a0007;
+}
+
+.delete-dialog-actions button:disabled {
+  background-color: #ef9a9a !important;
+  color: #fff !important;
+  cursor: not-allowed;
 }

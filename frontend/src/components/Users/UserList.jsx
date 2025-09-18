@@ -40,9 +40,9 @@ function UsersList() {
                 <div className="users-header">
                     <h1>Manage Users</h1>
                 </div>
-                <div className="loading-container">
+                <div className="loading-container-user">
                     <div className="spinner"></div>
-                    <p className="loading-text">Loading users, please wait...</p>
+                    <p className="loading-text-user">Loading users, please wait...</p>
                 </div>
             </div>
         );
@@ -120,7 +120,11 @@ function UsersList() {
             <AddUserForm open={openAdd} handleClose={() => setOpenAdd(false)} />
 
             {/* Delete User Dialog */}
-            <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+            <Dialog 
+                open={openDelete} 
+                onClose={() => setOpenDelete(false)}
+                classes={{ paper: 'custom-dialog-paper' }}
+                >
                 <DeleteUser
                     handleCloseDelete={() => setOpenDelete(false)}
                     userId={userIdToDelete}

@@ -101,7 +101,7 @@ function UpdateUser({ handleCloseUpdate, user }) {
             name="role"
             control={control}
             render={({ field }) => (
-              <FormControl fullWidth margin="dense">
+              <FormControl fullWidth margin="normal">
                 <InputLabel id="role-label">Role</InputLabel>
                 <Select labelId="role-label" {...field}>
                   <MenuItem value="manage">Manage</MenuItem>
@@ -113,7 +113,7 @@ function UpdateUser({ handleCloseUpdate, user }) {
         </form>
       </DialogContent>
 
-      <DialogActions>
+      <DialogActions className="update-dialog-actions">
         <Button onClick={handleCloseUpdate}>Cancel</Button>
         <Button
           type="submit"
@@ -125,6 +125,7 @@ function UpdateUser({ handleCloseUpdate, user }) {
           {isLoading ? "Updating..." : "Update"}
         </Button>
       </DialogActions>
+
     </>
   );
 }
