@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from 'js-cookie';
-import { toast } from "react-toastify";
 
 const api = axios.create({
     withCredentials: true,
@@ -48,6 +47,25 @@ export const createUser = createAsyncThunk(
         }
     }
 );
+
+export const updateUser = createAsyncThunk(
+    "users/updateUser",
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            await csrf();
+            const token = Cookies.get("XSRF-TOKEN");
+            const response = await api.put(`/api/users/${id}`, data, {
+                headers: {
+                    "X-XSRF-TOKEN": token,
+                },
+            });
+            return response.data.user;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || "Cannot update user");
+        }
+    }
+);
+
 
 export const deleteUser = createAsyncThunk(
     "users/deleteUser",
@@ -102,13 +120,32 @@ const userSlice = createSlice({
                 console.log("User created successfully:", action.payload);
                 state.list.push(action.payload); // add new user to state
                 state.isLoading = false;
-                toast.success("User created successfully!");
+
             })
             .addCase(createUser.rejected, (state, action) => {
                 console.log("Error creating user:", action.payload);
                 state.error = action.payload;
                 state.isLoading = false;
-                toast.error(`Error: ${action.payload}`);
+            });
+
+        builder
+            // update user
+            .addCase(updateUser.pending, (state) => {
+                console.log("Updating user...");
+                state.isLoading = true;
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
+                console.log("User Updated successfully:", action.payload);
+                const index = state.list.findIndex(u => u.id === action.payload.id);
+                if (index !== -1) {
+                    state.list[index] = action.payload; // replace updated user
+                }
+                state.isLoading = false;
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                console.log("Error Updating user:", action.payload);
+                state.error = action.payload;
+                state.isLoading = false;
             });
 
         builder
@@ -121,13 +158,12 @@ const userSlice = createSlice({
                 console.log('User Deleted successfully!');
                 state.list = state.list.filter((user) => user.id !== action.payload);
                 state.isLoading = false;
-                toast.success("User deleted successfully!");
+
             })
             .addCase(deleteUser.rejected, (state, action) => {
-                console.log('Error Deleting user:',action.payload);
+                console.log('Error Deleting user:', action.payload);
                 state.error = action.payload;
                 state.isLoading = false;
-                toast.error(`Error: ${action.payload}`);
             });
 
     },

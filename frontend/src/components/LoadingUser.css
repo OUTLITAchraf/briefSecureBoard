@@ -1,5 +1,5 @@
 /* Center content */
-.loading-container {
+.loadingUser-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,7 +9,7 @@
 }
 
 /* Spinner */
-.spinner-loading{
+.spinner-loadingUser{
   width: 60px;
   height: 60px;
   border: 6px solid #e0e0e0; /* gray border */
@@ -19,8 +19,8 @@
   margin-bottom: 16px;
 }
 
-/* Loading text */
-.loading-text {
+/* loadingUser text */
+.loadingUser-text {
   font-size: 18px;
   color: #333;
   font-weight: 500;

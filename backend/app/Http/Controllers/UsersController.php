@@ -59,26 +59,60 @@ class UsersController extends Controller
         ]);
     }
 
-    public function destroy($id)
-{
-    $user = User::findOrFail($id);
+    public function update(Request $request, $id)
+    {
 
-    // Optional safeguard: prevent deleting admin
-    if ($user->hasRole('admin')) {
+        $user = auth()->user();
+        if (!$user->hasRole('admin')) {
+            return response()->json([
+                'message' => 'unautherized'
+            ], 403);
+        }
+        $user = User::findOrFail($id);
+
+        // Validate incoming data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required|exists:roles,name',
+        ]);
+
+        // Update user basic info
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
+        // Sync role (remove old, assign new)
+        $user->syncRoles([$validated['role']]);
+
         return response()->json([
-            'message' => 'Cannot delete admin users.'
-        ], 403);
+            'message' => 'User updated successfully!',
+            'user' => $user->load('roles'), // return with role
+        ]);
     }
 
-    // Detach roles
-    $user->roles()->detach();
 
-    // Delete user
-    $user->delete();
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
 
-    return response()->json([
-        'message' => 'User deleted successfully!'
-    ]);
-}
+        // Optional safeguard: prevent deleting admin
+        if ($user->hasRole('admin')) {
+            return response()->json([
+                'message' => 'Cannot delete admin users.'
+            ], 403);
+        }
+
+        // Detach roles
+        $user->roles()->detach();
+
+        // Delete user
+        $user->delete();
+
+        return response()->json([
+            'message' => 'User deleted successfully!'
+        ]);
+    }
 
 }
