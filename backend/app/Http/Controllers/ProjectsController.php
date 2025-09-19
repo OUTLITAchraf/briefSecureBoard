@@ -13,15 +13,19 @@ class ProjectsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
-                'message' => 'unautherized'
+                'message' => 'unauthorized'
             ], 403);
         }
 
-        $projects = Project::where('user_id', $user->id)
-            ->with('user', 'teamMembers')
-            ->get();
+        if ($user->hasRole('admin')) {
+            $projects = Project::with('user', 'teamMembers')->get();
+        } else {
+            $projects = Project::where('user_id', $user->id)
+                ->with('user', 'teamMembers')
+                ->get();
+        }
 
         if (!$projects) {
             return response()->json([
@@ -40,7 +44,7 @@ class ProjectsController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
                 'message' => 'Unauthorized'
             ], 403);
@@ -88,7 +92,7 @@ class ProjectsController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
                 'message' => 'unautherized'
             ], 403);
@@ -135,7 +139,7 @@ class ProjectsController extends Controller
         //
         $user = auth()->user();
 
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             // abort(403, 'Accès non autorisé.');
             return response()->json([
                 'message' => 'unautherized'
@@ -161,7 +165,7 @@ class ProjectsController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
                 'message' => 'Unauthorized'
             ], 403);

@@ -36,7 +36,6 @@ function App() {
             <Route path='/home/profile' element={<Profile />} />
             {/* Add more protected routes here */}
             <Route path='/home/dashboard-users' element={<UserDashboard />} />
-            {/* <Route path='/home/projects' element={<Projects />} /> */}
             <Route path='/home/projects' element={<AllProjects />} />
             <Route path='/home/tasks' element={<AllTasks />} />
           </Route>
