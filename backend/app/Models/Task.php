@@ -15,6 +15,7 @@ class Task extends Model
         'name',
         'description',
         'status',
+        'created_by',
     ];
 
     /**
@@ -32,4 +33,10 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'assigned_user_id');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
 }

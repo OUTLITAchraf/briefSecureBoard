@@ -17,18 +17,21 @@ class DashboardController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if (!$user->hasRole('manage')) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
+        if ($user->hasRole('manage')) {
+            // Manager dashboard
+            $projects = Project::where('user_id', $user->id)->get();
+            $projectIds = $projects->pluck('id');
+            $tasks = Task::whereIn('project_id', $projectIds)
+                ->where('created_by', $user->id) // 👈 only tasks created by manager
+                ->get();
+        } elseif ($user->hasRole('admin')) {
+            // Admin dashboard → all projects & all tasks
+            $projects = Project::all();
+            $projectIds = $projects->pluck('id');
+            $tasks = Task::whereIn('project_id', $projectIds)->get();
+        } else {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
-
-        // Get the projects created by the authenticated user
-        $projects = Project::where('user_id', $user->id)->get();
-        $projectIds = $projects->pluck('id');
-
-        // Get all tasks associated with those projects
-        $tasks = Task::whereIn('project_id', $projectIds)->get();
 
         // 1. Get total counts
         $totalProjects = $projects->count();

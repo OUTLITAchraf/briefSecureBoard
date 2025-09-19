@@ -17,15 +17,19 @@ class TaskController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
                 'message' => 'Unauthorized'
             ], 403);
         }
 
-        $tasks = Task::whereHas('project', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->with('project', 'assignedUser')->get();
+        if ($user->hasRole('admin')) {
+            $tasks = Task::with('project', 'assignedUser', 'creator')->get();
+        } else {
+            $tasks = Task::whereHas('project', function ($query) use ($user) {
+                $query->where('created_by', $user->id);
+            })->with('project', 'assignedUser', 'creator')->get();
+        }
 
         return response()->json([
             'message' => 'Tasks fetched successfully.',
@@ -40,7 +44,7 @@ class TaskController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
                 'message' => 'Unauthorized'
             ], 403);
@@ -55,7 +59,7 @@ class TaskController extends Controller
 
         // Ensure the selected project actually belongs to the authenticated manager
         $project = Project::find($validatedData['project_id']);
-        if (!$project || $project->user_id !== $user->id) {
+        if (!$project || (!$user->hasRole('admin') && $project->user_id !== $user->id) ) {
             return response()->json(['message' => 'Unauthorized to add a task to this project.'], 403);
         }
 
@@ -66,6 +70,7 @@ class TaskController extends Controller
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
             'status' => 'todo', // Set the default status
+            'created_by' => $user->id,
         ]);
 
         // 5. Eager load and return the newly created task
@@ -84,13 +89,13 @@ class TaskController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
                 'message' => 'Unauthorized'
             ], 403);
         }
 
-        if ($task->project->user_id !== $user->id) {
+        if ($task->project->user_id !== $user->id && !$user->hasRole('admin')) {
             return response()->json(['message' => 'You are not authorized to delete this task.'], 403);
         }
 
@@ -108,13 +113,13 @@ class TaskController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-        if (!$user->hasRole('manage')) {
+        if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
                 'message' => 'Unauthorized'
             ], 403);
         }
 
-        if ($task->project->user_id !== $user->id) {
+        if ($task->project->user_id !== $user->id && !$user->hasRole('admin')) {
             return response()->json(['message' => 'You are not authorized to edit this task.'], 403);
         }
 

@@ -15,7 +15,7 @@ import {
 import { FaRegListAlt, FaTasks } from 'react-icons/fa';
 import { IoIosArrowForward } from "react-icons/io";
 
-import './ManagerDashboard.css';
+import './AdminDashboard.css';
 import { fetchDashboardData } from '../../features/ProjectsSlice';
 
 // Register the necessary Chart.js components
@@ -28,7 +28,7 @@ ChartJS.register(
     Legend
 );
 
-const ManagerDashboard = () => {
+const AdminDashboard = () => {
     const dispatch = useDispatch();
     const {statistics:{data, isLoading, error} } = useSelector((state) => state.projects);
 
@@ -145,4 +145,4 @@ const ManagerDashboard = () => {
     );
 };
 
-export default ManagerDashboard;
+export default AdminDashboard;
