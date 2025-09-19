@@ -13,6 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dahboard'
 import UserDashboard from './pages/UserDashboard'
 import AllProjects from './pages/projects/AllProjects'
+import AllTasks from './pages/tasks/AllTasks'
 
 function App() {
   const dispatch = useDispatch()
@@ -37,6 +38,7 @@ function App() {
             <Route path='/home/dashboard-users' element={<UserDashboard />} />
             {/* <Route path='/home/projects' element={<Projects />} /> */}
             <Route path='/home/projects' element={<AllProjects />} />
+            <Route path='/home/tasks' element={<AllTasks />} />
           </Route>
         </Route>
       </Routes>

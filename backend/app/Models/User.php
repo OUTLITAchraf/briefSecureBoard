@@ -50,4 +50,9 @@ class User extends Authenticatable implements LaratrustUser
     {
         return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'assigned_user_id');
+    }
 }
