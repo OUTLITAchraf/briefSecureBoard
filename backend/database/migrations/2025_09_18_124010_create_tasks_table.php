@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('name');
             $table->text('description');
             $table->string('status')->default('todo');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

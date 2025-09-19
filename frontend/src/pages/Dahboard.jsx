@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import ManagerDashboard from "./managerDashboard/ManagerDashboard";
 import UserDashboardStatistic from "./userDashboard/UserDashboardStatistic";
+import AdminDashboard from "./AdminDashboard/AdminDashboard";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -17,8 +18,7 @@ const Dashboard = () => {
 
       {role === "admin" && (
         <div>
-          <h2>Admin Dashboard</h2>
-          <p>You can manage users, projects</p>
+          <AdminDashboard/>
         </div>
       )}
 

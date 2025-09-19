@@ -127,8 +127,8 @@ export const UpdateProject = createAsyncThunk(
 );
 
 // fetch statistics
-export const fetchManagerDashboardData = createAsyncThunk(
-    'dashboard/fetchManagerDashboardData',
+export const fetchDashboardData = createAsyncThunk(
+    'dashboard/fetchDashboardData',
     async (_, { rejectWithValue }) => {
         try {
 
@@ -382,18 +382,18 @@ const ProjectSlice = createSlice({
             })
 
             // Fetch statistics
-            .addCase(fetchManagerDashboardData.pending, (state) => {
+            .addCase(fetchDashboardData.pending, (state) => {
                 console.log('manager fetch data statistics pending:');
 
                 state.statistics.isLoading = true;
                 state.statistics.error = null;
             })
-            .addCase(fetchManagerDashboardData.fulfilled, (state, action) => {
+            .addCase(fetchDashboardData.fulfilled, (state, action) => {
                 console.log('manager fetch data statistics fulfielled:', action);
                 state.statistics.isLoading = false;
                 state.statistics.data = action.payload;
             })
-            .addCase(fetchManagerDashboardData.rejected, (state, action) => {
+            .addCase(fetchDashboardData.rejected, (state, action) => {
                 console.log('manager fetch data statistics rejected:', action);
                 state.statistics.isLoading = false;
                 state.statistics.error = action.payload;
