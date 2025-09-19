@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -48,6 +49,12 @@ Route::middleware('web')->group(function () {
         Route::get('/projects/team-members', [ProjectsController::class, 'getTeamMembers']);
     });
 
+    // Manager Route (tasks)
+    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::post('/tasks', [TaskController::class, 'store']);
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
+    Route::put('/tasks/{task}', [TaskController::class, 'update']);
+
     // User CRUD routes
 
     Route::middleware('auth:sanctum')->group(function () {
@@ -55,6 +62,7 @@ Route::middleware('web')->group(function () {
         Route::post('/users', [UsersController::class, 'store']);
         Route::delete('/users/{id}', [UsersController::class, 'destroy']);
     });
+
 
 });
 

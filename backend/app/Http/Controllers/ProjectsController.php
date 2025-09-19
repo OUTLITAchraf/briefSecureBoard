@@ -6,7 +6,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Jobs\SendProjectNotifications;
 class ProjectsController extends Controller
 {
 
@@ -66,9 +66,12 @@ class ProjectsController extends Controller
             $project->teamMembers()->sync($validatedData['team_members']);
         }
 
+        // SendProjectNotifications::dispatch($project);
+
         $projects = Project::where('user_id', $user->id)
             ->with('user', 'teamMembers')
             ->get();
+
 
         return response()->json([
             'message' => "New project was created successfully",

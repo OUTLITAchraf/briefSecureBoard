@@ -14,7 +14,7 @@ function MainLayout({ children }) {
 
     const role = user?.roles?.[0]?.name; // because you load roles in backend
 
-    
+
     return (
         <div className="main-layout-container">
             {/* Barre latérale (Sidebar) */}
@@ -28,12 +28,15 @@ function MainLayout({ children }) {
                 <nav className="navigation-links">
                     <Link to='/home' className="nav-link">Dashboard</Link>
                     {role === 'manage' || role === 'admin' ? (
-                        <Link to='/home/projects' className="nav-link">Projects</Link>
+                        <>
+                            <Link to='/home/projects' className="nav-link">Projects</Link>
+                            <Link to='/home/tasks' className="nav-link">Tasks</Link>
+                        </>
                     ) : null}
                     {role === 'admin' && (
                         <Link to='/home/dashboard-users' className="nav-link">Users</Link>
                     )}
-                    
+
                 </nav>
             </aside>
 
