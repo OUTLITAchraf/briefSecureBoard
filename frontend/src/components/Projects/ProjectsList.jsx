@@ -140,7 +140,11 @@ function ProjectsList() {
                                     {projects?.map(project => (
                                         <tr key={project?.id}>
                                             <td>{project?.name}</td>
-                                            <td>{project?.description}</td>
+                                            <td className="description-cell">
+                                                <div className="description-text">
+                                                    {project.description}
+                                                </div>
+                                            </td>
                                             <td>{project?.user?.name}</td>
                                             <td>
                                                 {
@@ -200,7 +204,7 @@ function ProjectsList() {
                 handleClose={() => setIsEditFormOpen(false)}
                 projectToEdit={projectToEdit}
             />
-            
+
             {/* DETAILS PROJECT*/}
             <ProjectDetails
                 open={isDetailsOpen}

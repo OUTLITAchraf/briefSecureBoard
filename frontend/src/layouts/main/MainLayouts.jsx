@@ -36,6 +36,14 @@ function MainLayout({ children }) {
                     {role === 'admin' && (
                         <Link to='/home/dashboard-users' className="nav-link">Users</Link>
                     )}
+                    {role === 'user' && (
+                        <>
+                            <Link to='/home/my-projects' className="nav-link">My Projects</Link>
+                            <Link to='/home/my-tasks' className="nav-link">My Tasks</Link>
+                        </>
+                    )}
+
+
 
                 </nav>
             </aside>

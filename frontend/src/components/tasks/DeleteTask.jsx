@@ -37,8 +37,9 @@ const DeleteTask = ({ open, handleClose, taskIdToDelete }) => {
         <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            aria-labelledby="delete-dialog-title"
+            aria-describedby="delete-dialog-description"
+            classes={{ paper: 'custom-dialog-paper' }}
         >
             <DialogTitle id="alert-dialog-title">
                 {"Confirm Deletion"}
@@ -48,9 +49,9 @@ const DeleteTask = ({ open, handleClose, taskIdToDelete }) => {
                     Are you sure you want to delete this task? This action cannot be undone.
                 </DialogContentText>
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} disabled={isDeleting}>Cancel</Button>
-                <Button onClick={handleDelete} color="error" autoFocus disabled={isDeleting}>
+            <DialogActions className="dialog-actions">
+                <Button onClick={handleClose} disabled={isDeleting} className="cancel-button">Cancel</Button>
+                <Button onClick={handleDelete} className="delete-button" color="error" autoFocus disabled={isDeleting}>
                     {isDeleting ? <CircularProgress size={24} /> : 'Delete'}
                 </Button>
             </DialogActions>

@@ -366,3 +366,19 @@ body {
     color: #3498db !important;
     font-weight: 500 !important;
 }
+
+
+.description-cell {
+    max-width: 300px;
+    /* Adjust this value to control the column width */
+}
+
+.description-text {
+    /* Required for the ellipsis to work on multiple lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Limit the text to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

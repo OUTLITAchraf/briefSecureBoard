@@ -8,9 +8,7 @@
     **Project Description:**
     {{ $project->description }}
 
-    <x-mail::button :url="url('/projects/' . $project->id)">
-        View Project
-    </x-mail::button>
+    
 
     Thanks,
     {{ config('app.name') }}

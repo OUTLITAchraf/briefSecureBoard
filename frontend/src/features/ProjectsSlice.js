@@ -126,6 +126,114 @@ export const UpdateProject = createAsyncThunk(
     }
 );
 
+// fetch statistics
+export const fetchManagerDashboardData = createAsyncThunk(
+    'dashboard/fetchManagerDashboardData',
+    async (_, { rejectWithValue }) => {
+        try {
+
+            const token = localStorage.getItem('token');
+            const response = await api.get('/api/dashboard', {
+                headers: {
+                    "X-XSRF-TOKEN": token,
+                },
+            });
+            return response.data.data;
+        } catch (error) {
+            console.error('Error fetching dashboard data:', error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+// Fetch user Projects
+export const fetchUserProjects = createAsyncThunk(
+    'projects/fetchUserProjects',
+    async (_, { rejectWithValue }) => {
+        try {
+            await csrf();
+            const token = Cookies.get("XSRF-TOKEN");
+            const response = await api.get(`/api/user-projects`, {
+                headers: {
+                    "X-XSRF-TOKEN": token,
+                },
+            });
+            console.log('Response fetch user projects :', response);
+
+            return response.data;
+        } catch (error) {
+            console.log('error  fetch user projects :', error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+//Fetch user Tasks
+export const fetchUserTasks = createAsyncThunk(
+    'tasks/fetchUserTasks',
+    async (_, { rejectWithValue }) => {
+        try {
+            await csrf();
+            const token = Cookies.get("XSRF-TOKEN");
+            const response = await api.get(`/api/user-tasks`, {
+                headers: {
+                    "X-XSRF-TOKEN": token,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
+//Edit user's task status
+export const updateTaskStatus = createAsyncThunk(
+    'tasks/updateTaskStatus',
+    async ({ taskId, newStatus }, { rejectWithValue }) => {
+        try {
+            await csrf();
+            const token = Cookies.get("XSRF-TOKEN");
+            const response = await api.patch(`/api/tasks/${taskId}/status`,
+                { status: newStatus },
+                {
+                    headers: {
+                        "X-XSRF-TOKEN": token,
+                    },
+                });
+
+            console.log('Response edit status :', response);
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+// fetch user dashboard data
+export const fetchUserDashboardData = createAsyncThunk(
+    'userDashboard/fetchUserDashboardData',
+    async (_, { rejectWithValue }) => {
+        try {
+            await csrf();
+            const token = Cookies.get("XSRF-TOKEN");
+            const response = await api.get('/api/user-dashboard', {
+                headers: {
+                    "X-XSRF-TOKEN": token,
+                },
+            });
+            console.log("Response fetch user statistic :", response);
+
+            return response.data.data;
+        } catch (error) {
+            console.log('fetch statistics user :', error);
+
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const ProjectSlice = createSlice({
     name: 'projects',
     initialState: {
@@ -148,11 +256,51 @@ const ProjectSlice = createSlice({
         update: {
             isLoading: false,
             error: null
-        }
+        },
+        statistics: {
+            data: null,
+            isLoading: false,
+            error: null,
+        },
+        userProjects: {
+            data: [],
+            isLoading: false,
+            error: null
+        },
+        userTasks: {
+            test: "helloooo",
+            data: [],
+            isLoading: false,
+            error: null,
+        },
+        updateStatus: {
+            isLoading: false,
+            error: null
+        },
+        userDashboard: {
+            data: null,
+            isLoading: false,
+            error: null,
+        },
+
     },
     reducers: {},
     extraReducers: (builder) => {
         builder
+
+            //fetch statistic fetch user dashboard
+            .addCase(fetchUserDashboardData.pending, (state) => {
+                state.userDashboard.isLoading = true;
+                state.userDashboard.error = null;
+            })
+            .addCase(fetchUserDashboardData.fulfilled, (state, action) => {
+                state.userDashboard.isLoading = false;
+                state.userDashboard.data = action.payload;
+            })
+            .addCase(fetchUserDashboardData.rejected, (state, action) => {
+                state.userDashboard.isLoading = false;
+                state.userDashboard.error = action.payload;
+            })
 
             //fetch projects
             .addCase(fetchProjects.pending, (state) => {
@@ -231,7 +379,93 @@ const ProjectSlice = createSlice({
             .addCase(UpdateProject.rejected, (state, action) => {
                 state.update.isLoading = false;
                 state.update.error = action.payload;
-            });
+            })
+
+            // Fetch statistics
+            .addCase(fetchManagerDashboardData.pending, (state) => {
+                console.log('manager fetch data statistics pending:');
+
+                state.statistics.isLoading = true;
+                state.statistics.error = null;
+            })
+            .addCase(fetchManagerDashboardData.fulfilled, (state, action) => {
+                console.log('manager fetch data statistics fulfielled:', action);
+                state.statistics.isLoading = false;
+                state.statistics.data = action.payload;
+            })
+            .addCase(fetchManagerDashboardData.rejected, (state, action) => {
+                console.log('manager fetch data statistics rejected:', action);
+                state.statistics.isLoading = false;
+                state.statistics.error = action.payload;
+            })
+
+
+            // Handle fetchUserProjects
+            .addCase(fetchUserProjects.pending, (state) => {
+                console.log('fetch user projects pending');
+
+                state.userProjects.isLoading = true;
+                state.userProjects.error = null;
+            })
+            .addCase(fetchUserProjects.fulfilled, (state, action) => {
+                console.log('fetch user projects fulfilled', action);
+
+                state.userProjects.isLoading = false;
+                state.userProjects.data = action.payload.data;
+            })
+            .addCase(fetchUserProjects.rejected, (state, action) => {
+                console.log('fetch user projects rejevted', action);
+
+                state.userProjects.isLoading = false;
+                state.userProjects.error = action.payload;
+            })
+
+            // Handle fetchUserTasks
+            .addCase(fetchUserTasks.pending, (state) => {
+                console.log('fetch user tasks Pending ');
+
+                state.userTasks.isLoading = true;
+                state.userTasks.error = null;
+            })
+            .addCase(fetchUserTasks.fulfilled, (state, action) => {
+                console.log('fetch user tasks Fulfilled : ', action);
+
+                state.userTasks.isLoading = false;
+                state.userTasks.data = action.payload.data;
+            })
+            .addCase(fetchUserTasks.rejected, (state, action) => {
+                console.log('fetch user tasks Rejected : ', action);
+
+                state.userTasks.isLoading = false;
+                state.userTasks.error = action.payload;
+            })
+
+
+            // Handle updateTaskStatus
+            .addCase(updateTaskStatus.pending, (state) => {
+                console.log('Edit user tasks status Pending ');
+                state.updateStatus.isLoading = true;
+                state.updateStatus.error = null;
+            })
+            .addCase(updateTaskStatus.fulfilled, (state, action) => {
+                console.log('Edit user tasks status Fulfilled :', action);
+                state.updateStatus.isLoading = false;
+                state.updateStatus.error = null;
+                const updatedTask = action.payload;
+                const index = state.userTasks.data.findIndex(task => task.id === updatedTask.id);
+                if (index !== -1) {
+                    state.userTasks.data[index].status = updatedTask.status;
+                }
+            })
+            .addCase(updateTaskStatus.rejected, (state, action) => {
+                console.log('Edit user tasks status Rejected :', action);
+                state.updateStatus.isLoading = false;
+                state.updateStatus.error = action.payload;
+            })
+
+
+
+
 
     },
 });
