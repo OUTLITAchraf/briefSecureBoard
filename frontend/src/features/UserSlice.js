@@ -16,6 +16,18 @@ const csrf = async () => {
 
     }
 }
+
+// Redirect to unauthorized page
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 403) {
+      window.location.href = '/unauthorized';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Fetch all users
 export const fetchUsers = createAsyncThunk(
     "users/fetchUsers",

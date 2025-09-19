@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Not Authenticated'], 401);
         }
 
         if ($user->hasRole('manage')) {

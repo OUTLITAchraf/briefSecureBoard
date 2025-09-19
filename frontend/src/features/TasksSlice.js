@@ -17,6 +17,17 @@ const csrf = async () => {
     }
 }
 
+// Redirect to unauthorized page
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 403) {
+      window.location.href = '/unauthorized';
+    }
+    return Promise.reject(error);
+  }
+);
+
 
 // fetch all tasks for the manager
 export const fetchTasks = createAsyncThunk(
