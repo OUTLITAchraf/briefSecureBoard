@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
@@ -64,7 +65,19 @@ Route::middleware('web')->group(function () {
         Route::delete('/users/{id}', [UsersController::class, 'destroy']);
     });
 
+    // Dashboard Route
+    Route::get('/dashboard', [DashboardController::class, 'getManagerDashboardData']);
 
+    // user route
+    // User-specific project route
+    Route::get('/user-projects', [ProjectsController::class, 'getProjectsForUser']);
+    // User-specific tasks
+    Route::get('/user-tasks', [ProjectsController::class, 'getUserTasks']);
+
+    // User Dashboard Route
+    Route::get('/user-dashboard', [ProjectsController::class, 'getUserDashboardData']);
+    // Update task status
+    Route::patch('/tasks/{task}/status', [ProjectsController::class, 'updateStatus']);
 });
 
 

@@ -1,0 +1,62 @@
+/* src/components/ProjectDetails.css */
+
+.details-dialog-paper {
+    padding: 30px;
+    border-radius: 20px !important;
+    background-color: #ffffff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 600px !important;
+}
+
+.details-dialog-title {
+    padding: 0;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.details-title-text {
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    color: #2c3e50 !important;
+}
+
+.details-close-button {
+    color: #7f8c8d !important;
+    transition: color 0.3s ease;
+}
+
+.details-close-button:hover {
+    color: #333 !important;
+}
+
+.details-dialog-content {
+    padding: 0 !important;
+}
+
+.details-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 25px;
+    padding-top: 10px;
+}
+
+.details-heading {
+    font-weight: 600 !important;
+    color: #7f8c8d !important;
+    text-transform: uppercase;
+    font-size: 0.9rem !important;
+    letter-spacing: 0.5px;
+}
+
+.details-value {
+    color: #34495e !important;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.details-description-value {
+    white-space: pre-wrap;
+}

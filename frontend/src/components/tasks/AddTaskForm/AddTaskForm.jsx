@@ -31,9 +31,17 @@ const AddTaskForm = ({ open, handleClose }) => {
     const { users } = useSelector((state) => state.projects);
 
 
-    const { register, handleSubmit, control, formState: { errors }, reset } = useForm({
+    const { register, handleSubmit, control, formState: { errors }, reset, watch } = useForm({
         resolver: yupResolver(validationSchema),
     });
+
+    // Watch the project_id field for changes
+    const selectedProjectId = watch('project_id');
+    const selectedProject = projects?.find(project => project.id === selectedProjectId);
+    const teamMemberIds = selectedProject?.team_members ? selectedProject.team_members.map(member => member.id) : [];
+
+    // Filter users based on the team member IDs
+    const filteredUsers = users?.data?.filter(user => teamMemberIds.includes(user.id)) || [];
 
     useEffect(() => {
         if (open) {
@@ -122,15 +130,21 @@ const AddTaskForm = ({ open, handleClose }) => {
                                 <Select
                                     {...field}
                                     label="Assigned To (optional)"
+                                    disabled={!selectedProjectId} // Disable until a project is selected
                                 >
                                     <MenuItem value="">
                                         <em>Unassigned</em>
                                     </MenuItem>
-                                    {users?.data?.map((user) => (
+                                    {/* Render only filtered users */}
+                                    {filteredUsers?.length > 0 && filteredUsers.map((user) => (
                                         <MenuItem key={user.id} value={user.id}>
                                             {user.name}
                                         </MenuItem>
                                     ))}
+                                    {/* Display a message if no team members */}
+                                    {selectedProjectId && filteredUsers?.length === 0 && (
+                                        <MenuItem disabled>No team members found for this project</MenuItem>
+                                    )}
                                 </Select>
                             )}
                         />

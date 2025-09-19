@@ -14,6 +14,8 @@ import Dashboard from './pages/Dahboard'
 import UserDashboard from './pages/UserDashboard'
 import AllProjects from './pages/projects/AllProjects'
 import AllTasks from './pages/tasks/AllTasks'
+import UserAllProjects from './pages/userProjects/UserAllProjects'
+import UserTasksList from './components/userTasks/UserTaksList'
 
 function App() {
   const dispatch = useDispatch()
@@ -38,6 +40,8 @@ function App() {
             <Route path='/home/dashboard-users' element={<UserDashboard />} />
             {/* <Route path='/home/projects' element={<Projects />} /> */}
             <Route path='/home/projects' element={<AllProjects />} />
+            <Route path='/home/my-projects' element={<UserAllProjects />} />
+            <Route path='/home/my-tasks' element={<UserTasksList />} />
             <Route path='/home/tasks' element={<AllTasks />} />
           </Route>
         </Route>
