@@ -14,7 +14,7 @@ class TaskController extends Controller
         $user = auth()->user();
 
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Not Authenticated'], 401);
         }
 
         if (!$user->hasRole(['admin', 'manage'])) {
@@ -42,7 +42,7 @@ class TaskController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Not Authenticated'], 401);
         }
         if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([
@@ -86,7 +86,7 @@ class TaskController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Not Authenticated'], 401);
         }
 
         if (!$user->hasRole(['admin', 'manage'])) {
@@ -111,7 +111,7 @@ class TaskController extends Controller
         // 1. Authorization Check
         $user = Auth::user();
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Not Authenticated'], 401);
         }
         if (!$user->hasRole(['admin', 'manage'])) {
             return response()->json([

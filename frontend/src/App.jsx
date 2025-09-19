@@ -16,6 +16,7 @@ import AllProjects from './pages/projects/AllProjects'
 import AllTasks from './pages/tasks/AllTasks'
 import UserAllProjects from './pages/userProjects/UserAllProjects'
 import UserTasksList from './components/userTasks/UserTaksList'
+import UnauthorizedPage from './pages/UnauthorizedPage'
 
 function App() {
   const dispatch = useDispatch()
@@ -30,6 +31,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
+        <Route path='/unauthorized' element={<UnauthorizedPage />} />
 
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>

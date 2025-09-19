@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-
 const api = axios.create({
     withCredentials: true,
     baseURL: 'http://localhost:8000',
@@ -17,6 +16,18 @@ const csrf = async () => {
 
     }
 }
+
+// Redirect to unauthorized page
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 403) {
+      window.location.href = '/unauthorized';
+    }
+    return Promise.reject(error);
+  }
+);
+
 
 // Fetch Projects
 export const fetchProjects = createAsyncThunk(
