@@ -218,7 +218,7 @@ const AuthSlice = createSlice({
         builder.addCase(logout.fulfilled, (state, action) => {
             console.log('logout fufilled :', action);
             state.logout.isLoading = false;
-            // state.user = action.payload;
+            state.user = null;
         });
         builder.addCase(logout.rejected, (state, action) => {
             console.log('logout rjected :', action);

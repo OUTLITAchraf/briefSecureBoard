@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import './Login.css'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,20 +13,23 @@ const schema = Yup.object({
 }).required();
 
 function Login() {
-    let { login } = useSelector((state) => state.auth)
+    const { login, user, isLoadingUser } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
-    // let [LoginErrors, setErrors] = useState()
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
     });
 
-    const Login = async (data) => {
+    useEffect(() => {
+        if (user && !isLoadingUser) {
+            navigate('/home');
+        }
+    }, [user, isLoadingUser, navigate]);
+
+    const handleLogin = async (data) => {
         console.log("data :", data);
 
-        // console.log("token :", xsrfToken);
         try {
-
             const result = await dispatch(userLogin(data));
             if (result.meta.requestStatus === 'fulfilled') {
                 const userResult = await dispatch(fetchUser()).unwrap(); // 👈 wait for fetchUser
@@ -40,7 +43,7 @@ function Login() {
     }
     return (
 
-        <form className="form_container" onSubmit={handleSubmit(Login)}>
+        <form className="form_container" onSubmit={handleSubmit(handleLogin)}>
             <div className="title_container">
                 <p className="title">Login to your Account</p>
                 <span className="subtitle">Get started with our app, just create an account and enjoy the experience.</span>
